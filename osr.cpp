@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
 
         browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "http://deanm.github.io/pre3d/monster.html", browserSettings, nullptr);
 
-        // inject user-input by calling
+        // inject user-input by calling - non-trivial for non-windows - checkout the cefclient source and the platform specific cpp, like cefclient_osr_widget_gtk.cpp for linux
         // browser->GetHost()->SendKeyEvent(...);
         // browser->GetHost()->SendMouseMoveEvent(...);
         // browser->GetHost()->SendMouseClickEvent(...);
