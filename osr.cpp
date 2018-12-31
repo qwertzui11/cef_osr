@@ -1,15 +1,26 @@
-#include <cef_app.h>
-#include <cef_client.h>
-#include <cef_render_handler.h>
+#include <include/cef_app.h>
+#include <include/cef_client.h>
+#include <include/cef_render_handler.h>
 
-#include <OGRE/OgreEntity.h>
-#include <OGRE/OgreHardwarePixelBuffer.h>
-#include <OGRE/OgreMeshManager.h>
-#include <OGRE/OgreRenderWindow.h>
-#include <OGRE/OgreRoot.h>
+#include <OgreEntity.h>
+#include <OgreHardwarePixelBuffer.h>
+#include <OgreMeshManager.h>
+#include <OgreRenderWindow.h>
+#include <OgreRoot.h>
 
+#include <OgreCommon.h>
 
-
+#include <OgreRenderQueueListener.h>
+#include <OgreSingleton.h>
+#include <OgreTexture.h>
+#include <OgreSceneNode.h>
+#include <OgreTechnique.h>
+#include <OgreTextureManager.h>
+#include <OgreMaterialManager.h>
+#include <OgreInput.h>
+#include <OgreFrameListener.h>
+#include <OgreCamera.h>
+#include <OgreViewPort.h>
 class RenderHandler : public Ogre::FrameListener, public CefRenderHandler
 {
 public:
@@ -39,10 +50,10 @@ public:
 
     // CefRenderHandler interface
 public:
-    bool GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect)
+    void GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect)
     {
         rect = CefRect(0, 0, m_renderTexture->getWidth(), m_renderTexture->getHeight());
-        return true;
+        //return true;
     }
     void OnPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList &dirtyRects, const void *buffer, int width, int height)
     {
@@ -77,9 +88,10 @@ public:
 };
 
 
-int main(int argc, char *argv[])
+int main(HINSTANCE hInstance, int nCmdShow) 
 {
-    CefMainArgs args(argc, argv);
+    CefMainArgs args(hInstance);
+
 
     {
         int result = CefExecuteProcess(args, nullptr, nullptr);
@@ -129,7 +141,7 @@ int main(int argc, char *argv[])
         renderSystem = new Ogre::Root();
         if (!renderSystem->restoreConfig())
         {
-            renderSystem->showConfigDialog();
+            renderSystem->showConfigDialog(NULL);
         }
         renderSystem->initialise(true);
 
@@ -182,9 +194,9 @@ int main(int argc, char *argv[])
         // browserSettings.windowless_frame_rate = 60; // 30 is default
 
         // in linux set a gtk widget, in windows a hwnd. If not available set nullptr - may cause some render errors, in context-menu and plugins.
-        std::size_t windowHandle = 0;
+       CefWindowHandle windowHandle;
         renderSystem->getAutoCreatedWindow()->getCustomAttribute("WINDOW", &windowHandle);
-        window_info.SetAsWindowless(windowHandle, false); // false means no transparency (site background colour)
+        window_info.SetAsWindowless(windowHandle); // false means no transparency (site background colour)
 
         browserClient = new BrowserClient(renderHandler);
 
