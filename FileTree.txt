@@ -1,0 +1,175 @@
+Current File Tree in regards to OSR.
+
+GearCity.app
+├── Contents
+│   ├── Frameworks
+│   │   ├── Chromium\ Embedded\ Framework.framework
+│   │   │   ├── Chromium\ Embedded\ Framework
+│   │   │   ├── Libraries
+│   │   │   │   ├── libEGL.dylib
+│   │   │   │   ├── libGLESv2.dylib
+│   │   │   │   ├── libswiftshader_libEGL.dylib
+│   │   │   │   └── libswiftshader_libGLESv2.dylib
+│   │   │   └── Resources
+│   │   │       ├── Info.plist
+│   │   │       ├── am.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── ar.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── bg.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── bn.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── ca.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── cef.pak
+│   │   │       ├── cef_100_percent.pak
+│   │   │       ├── cef_200_percent.pak
+│   │   │       ├── cef_extensions.pak
+│   │   │       ├── cs.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── da.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── de.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── devtools_resources.pak
+│   │   │       ├── el.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── en.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── en_GB.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── es.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── es_419.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── et.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── fa.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── fi.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── fil.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── fr.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── gu.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── he.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── hi.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── hr.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── hu.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── icudtl.dat
+│   │   │       ├── id.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── it.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── ja.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── kn.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── ko.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── lt.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── lv.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── ml.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── mr.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── ms.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── natives_blob.bin
+│   │   │       ├── nb.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── nl.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── pl.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── pt_BR.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── pt_PT.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── ro.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── ru.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── sk.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── sl.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── snapshot_blob.bin
+│   │   │       ├── sr.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── sv.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── sw.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── ta.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── te.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── th.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── tr.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── uk.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── v8_context_snapshot.bin
+│   │   │       ├── vi.lproj
+│   │   │       │   └── locale.pak
+│   │   │       ├── zh_CN.lproj
+│   │   │       │   └── locale.pak
+│   │   │       └── zh_TW.lproj
+│   │   │           └── locale.pak
+│   │   ├── GearCity\ Helper.app
+│   │   │   └── Contents
+│   │   │       ├── Info.plist
+│   │   │       ├── MacOS
+│   │   │       │   └── GearCity\ Helper
+│   │   │       ├── PkgInfo
+│   │   │       ├── Resources
+│   │   │       │   └── Base.lproj
+│   │   │       │       └── MainMenu.nib
+│   │   │       └── _CodeSignature
+│   │   │           └── CodeResources
+│   │   ├── Ogre.framework
+│   │   ├── OgreOverlay.framework
+│   │   ├── OgreRTShaderSystem.framework
+│   │   ├── RenderSystem_GL.framework
+│   ├── Info.plist
+│   ├── MacOS
+│   │   ├── GPUCache
+│   │   │   ├── data_0
+│   │   │   ├── data_1
+│   │   │   ├── data_2
+│   │   │   ├── data_3
+│   │   │   └── index
+│   │   ├── GearCity
+│   │   ├── blob_storage
+│   │   │   └── 302f8dda-35c9-4b8c-aaeb-be73f250a3c7
+│   │   └── webrtc_event_logs
+│   ├── PkgInfo
+│   └── Resources
+│       ├── GPUCache
+│       │   ├── data_0
+│       │   ├── data_1
+│       │   ├── data_2
+│       │   ├── data_3
+│       │   └── index
+│       ├── blob_storage
+│       │   └── 6552447c-1b2b-4e4b-86df-923666b9920e
+│       ├── icon1.icns
+│       ├── qt_menu.nib
+│       │   ├── classes.nib
+│       │   ├── info.nib
+│       │   └── keyedobjects.nib
+│       └── webrtc_event_logs
+└── FilesTree.txt
+
+218 directories, 10157 files
