@@ -41,7 +41,7 @@ public:
             return false;
         }
 
-        m_renderNode->yaw(Ogre::Radian(evt.timeSinceLastFrame)*Ogre::Math::PI*2.*(1./10.)); // one turn in 10sec
+       // m_renderNode->yaw(Ogre::Radian(evt.timeSinceLastFrame)*Ogre::Math::PI*2.*(1./10.)); // one turn in 10sec
 
         CefDoMessageLoopWork();
 
@@ -88,8 +88,12 @@ public:
 };
 
 
-int main(HINSTANCE hInstance, int nCmdShow) 
-{
+int APIENTRY wWinMain(HINSTANCE hInstance,
+                      HINSTANCE hPrevInstance,
+                      LPTSTR lpCmdLine,
+                      int nCmdShow) {
+  UNREFERENCED_PARAMETER(hPrevInstance);
+  UNREFERENCED_PARAMETER(lpCmdLine);
     CefMainArgs args(hInstance);
 
 
@@ -109,6 +113,9 @@ int main(HINSTANCE hInstance, int nCmdShow)
 
     {
         CefSettings settings;
+        #if !defined(CEF_USE_SANDBOX)
+        settings.no_sandbox = true;
+        #endif
 
         // checkout detailed settings options http://magpcss.org/ceforum/apidocs/projects/%28default%29/_cef_settings_t.html
         // nearly all the settings can be set via args too.
@@ -138,7 +145,7 @@ int main(HINSTANCE hInstance, int nCmdShow)
     // renderer
     {
         // initalise Ogre3d
-        renderSystem = new Ogre::Root();
+        renderSystem = new Ogre::Root("plugins.cfg", "ogre.cfg","Ogre.log" );
         if (!renderSystem->restoreConfig())
         {
             renderSystem->showConfigDialog(NULL);
@@ -153,7 +160,7 @@ int main(HINSTANCE hInstance, int nCmdShow)
         camera->setNearClipDistance(0.1);
         camera->setFarClipDistance(100.);
         renderSystem->getAutoCreatedWindow()->addViewport(camera);
-        camera->getViewport()->setBackgroundColour(Ogre::ColourValue::White);
+        camera->getViewport()->setBackgroundColour(Ogre::ColourValue::Black);
 
         // create mesh, texture, material, node and entity
         renderTexture = Ogre::TextureManager::getSingleton().createManual(
@@ -200,7 +207,7 @@ int main(HINSTANCE hInstance, int nCmdShow)
 
         browserClient = new BrowserClient(renderHandler);
 
-        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "http://deanm.github.io/pre3d/monster.html", browserSettings, nullptr);
+        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "https://webglsamples.org/aquarium/aquarium.html", browserSettings, nullptr);
 
         // inject user-input by calling - non-trivial for non-windows - checkout the cefclient source and the platform specific cpp, like cefclient_osr_widget_gtk.cpp for linux
         // browser->GetHost()->SendKeyEvent(...);
