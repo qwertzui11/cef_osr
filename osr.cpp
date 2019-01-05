@@ -1,13 +1,8 @@
 #include <include/cef_app.h>
 #include <include/cef_client.h>
 #include <include/cef_render_handler.h>
-#include "include/wrapper/cef_library_loader.h"
+#include <include/wrapper/cef_library_loader.h>
 
-#include <OgreEntity.h>
-#include <OgreHardwarePixelBuffer.h>
-#include <OgreMeshManager.h>
-#include <OgreRenderWindow.h>
-#include <OgreRoot.h>
 #include <Ogre.h>
 
 
@@ -55,7 +50,6 @@ public:
         texBuf->lock(Ogre::HardwareBuffer::HBL_DISCARD);
         memcpy(texBuf->getCurrentLock().data, buffer, width*height*4);
         texBuf->unlock();
-        printf("\nonpaint\n");
     }
     
     // CefBase interface
@@ -70,12 +64,11 @@ class BrowserClient : public CefClient
 {
 public:
     BrowserClient(RenderHandler *renderHandler)
-    : m_renderHandler(renderHandler)
+        : m_renderHandler(renderHandler)
     {;}
     
     virtual CefRefPtr<CefRenderHandler> GetRenderHandler() override
-    {
-        printf("\ngetrenderhandler\n");
+    {        
         return m_renderHandler;
     }
     
@@ -87,13 +80,13 @@ public:
 
 int main(int argc, char *argv[])
 {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
     CefScopedLibraryLoader library_loader;
     if (!library_loader.LoadInMain())
         return 1;
+#endif
     
-    printf("\nstart\n");
-    CefMainArgs args(argc, argv);
-    
+    CefMainArgs args(argc, argv);    
     {
         CefRefPtr<CefCommandLine> command_line = CefCommandLine::CreateCommandLine();
         command_line->InitFromArgv(argc, argv);
@@ -115,11 +108,7 @@ int main(int argc, char *argv[])
         
         
         CefSettings settings;
-        
-        //CefString(&settings.log_file).FromASCII("/Users/ericjones/Documents/programming/gearcity/Client-Bin/debug.log");
-        settings.log_severity = LOGSEVERITY_VERBOSE;
-        
-         printf("\nsettings");
+                   
         // checkout detailed settings options http://magpcss.org/ceforum/apidocs/projects/%28default%29/_cef_settings_t.html
         // nearly all the settings can be set via args too.
         // settings.multi_threaded_message_loop = true; // not supported, except windows
@@ -129,8 +118,8 @@ int main(int argc, char *argv[])
         // settings.log_severity = LOGSEVERITY_DEFAULT;
         // CefString(&settings.resources_dir_path).FromASCII("");
         // CefString(&settings.locales_dir_path).FromASCII("");
-       // settings.no_sandbox = true;
-        //settings.windowless_rendering_enabled = true;
+        // settings.no_sandbox = true;
+        // settings.windowless_rendering_enabled = true;
         
         bool result = CefInitialize(args, settings, nullptr, nullptr);
         // CefInitialize creates a sub-proccess and executes the same executeable, as calling CefInitialize, if not set different in settings.browser_subprocess_path
@@ -141,19 +130,15 @@ int main(int argc, char *argv[])
             return -1;
         }
     }
-    
-   // Ogre::String myDocs = getMacPath() + "/GearCity/";
-    
+  
     Ogre::Root* renderSystem(nullptr);
     Ogre::SceneManager* renderScene(nullptr);
     Ogre::TexturePtr renderTexture;
     Ogre::SceneNode *renderNode;
-    printf("\n ogre \n");
     // renderer
     {
         // initalise Ogre3d
         renderSystem = new Ogre::Root();
-        // renderSystem->loadPlugin("/Users/ericjones/Documents/programming/gearcity/Client-Bin/GearCity.app/Contents/MacOS/RenderSystem_GL");
         if (!renderSystem->restoreConfig())
         {
             renderSystem->showConfigDialog();
@@ -189,8 +174,7 @@ int main(int argc, char *argv[])
         renderNode = renderScene->getRootSceneNode()->createChildSceneNode("node", Ogre::Vector3(0., 0., -3.));
         
         renderNode->attachObject(entity);
-        printf("\n init \n");
-        
+       
     }
     
     
@@ -211,13 +195,16 @@ int main(int argc, char *argv[])
         // browserSettings.windowless_frame_rate = 60; // 30 is default
         
         // in linux set a gtk widget, in windows a hwnd. If not available set nullptr - may cause some render errors, in context-menu and plugins.
-        /*std::size_t windowHandle = 0;
-        renderSystem->getAutoCreatedWindow()->getCustomAttribute("WINDOW", &windowHandle);*/
-        window_info.SetAsWindowless(0); // false means no transparency (site background colour)
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        window_info.SetAsWindowless(0);         
+#else
+        std::size_t windowHandle = 0;
+        renderSystem->getAutoCreatedWindow()->getCustomAttribute("WINDOW", &windowHandle);
+        window_info.SetAsWindowless(windowHandle); 
+#endif
         
         browserClient = new BrowserClient(renderHandler);
-        printf("\n website \n");
-        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "http://www.google.com", browserSettings, nullptr);
+        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "http://deanm.github.io/pre3d/monster.html", browserSettings, nullptr);
         
         
         // inject user-input by calling - non-trivial for non-windows - checkout the cefclient source and the platform specific cpp, like cefclient_osr_widget_gtk.cpp for linux
