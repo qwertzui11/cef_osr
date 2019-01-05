@@ -12,7 +12,7 @@ Tested with latest Ogre and latest cef binaries as of 1/5/2019.
 
 Make sure you add a valid Ogre.cfg and set cefroot within the cmakelists
 This is what you will get
-![cef sample]( https://i.imgur.com/u8WyKd3.png "Cef")
+![cef sample]( https://i.imgur.com/pvziPKd.gif "Cef")
 
 Ensure you got the content of the folder cef/Resources/* and the executable chrome-sandbox along with the osr binary.
 Ensure you copied the ogre plugins.cfg in your working directory.
