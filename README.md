@@ -3,6 +3,7 @@ This is an example of how to use [CEF](https://code.google.com/p/chromiumembedde
 The Example renders http://deanm.github.io/pre3d/monster.html to a 1024x768 texture.
 ## Authors
 [Markus Lanner](http://markus-lanner.com)
+[kenkit](https://github.com/kenkit/cef_osr/commits?author=kenkit)
 ## Building
 Use [Cmake](http://cmake.org) and a C++11 compiler.
 Tested with ogre3d 1.9 and CEF 3.2295.2034.
