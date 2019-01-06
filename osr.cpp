@@ -137,7 +137,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
         }
     }
 
-    Ogre::Root* renderSystem(nullptr);
+    Ogre::Root* root(nullptr);
     Ogre::SceneManager* renderScene(nullptr);
     Ogre::TexturePtr renderTexture;
     Ogre::SceneNode *renderNode;
@@ -145,21 +145,21 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     // renderer
     {
         // initalise Ogre3d
-        renderSystem = new Ogre::Root("plugins.cfg", "ogre.cfg","Ogre.log" );
-        if (!renderSystem->restoreConfig())
+        root = new Ogre::Root("plugins.cfg", "ogre.cfg","Ogre.log" );
+        if (!root->restoreConfig())
         {
-            renderSystem->showConfigDialog(NULL);
+            root->showConfigDialog(NULL);
         }
-        renderSystem->initialise(true);
+        root->initialise(true);
 
-        renderScene = renderSystem->createSceneManager(Ogre::ST_GENERIC);
+        renderScene = root->createSceneManager(Ogre::ST_GENERIC);
         renderScene->setAmbientLight(Ogre::ColourValue(1.));
 
         Ogre::Camera* camera(renderScene->createCamera("camera"));
         camera->setAutoAspectRatio(true);
         camera->setNearClipDistance(0.1);
         camera->setFarClipDistance(100.);
-        renderSystem->getAutoCreatedWindow()->addViewport(camera);
+        root->getAutoCreatedWindow()->addViewport(camera);
         camera->getViewport()->setBackgroundColour(Ogre::ColourValue::Black);
 
         // create mesh, texture, material, node and entity
@@ -188,7 +188,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     {
         renderHandler = new RenderHandler(renderTexture, renderNode);
 
-        renderSystem->addFrameListener(renderHandler);
+        root->addFrameListener(renderHandler);
     }
 
     // create browser-window
@@ -202,12 +202,12 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
         // in linux set a gtk widget, in windows a hwnd. If not available set nullptr - may cause some render errors, in context-menu and plugins.
        CefWindowHandle windowHandle;
-        renderSystem->getAutoCreatedWindow()->getCustomAttribute("WINDOW", &windowHandle);
+        root->getAutoCreatedWindow()->getCustomAttribute("WINDOW", &windowHandle);
         window_info.SetAsWindowless(windowHandle); // false means no transparency (site background colour)
 
         browserClient = new BrowserClient(renderHandler);
 
-        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "https://webglsamples.org/aquarium/aquarium.html", browserSettings, nullptr);
+        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "http://127.0.0.1:5500/awesome_progress.html", browserSettings, nullptr);
 
         // inject user-input by calling - non-trivial for non-windows - checkout the cefclient source and the platform specific cpp, like cefclient_osr_widget_gtk.cpp for linux
         // browser->GetHost()->SendKeyEvent(...);
@@ -218,7 +218,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
     // start rendering and calling method RenderHandler::frameStarted
     {
-        renderSystem->startRendering();
+        root->startRendering();
     }
 
     {
@@ -228,7 +228,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
         renderScene->destroyAllMovableObjects();
         delete renderScene;
-        delete renderSystem;
+        delete root;
         delete renderHandler;
     }
 
