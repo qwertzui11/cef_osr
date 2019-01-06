@@ -10,12 +10,13 @@ Use [Cmake](http://cmake.org) and a C++11 compiler.
 Tested with latest Ogre and latest cef binaries as of 1/5/2019.
 ## Running the example
 
-Make sure you add a valid Ogre.cfg and set cefroot within the cmakelists
+Download prebuilt cef binaries and extract them somewhere
+
+Make sure you set set(CEF_ROOT XXXX) within the cmakelists
+
 This is what you will get
 ![cef sample]( https://i.imgur.com/pvziPKd.gif "Cef")
 
-Ensure you got the content of the folder cef/Resources/* and the executable chrome-sandbox along with the osr binary.
+You might need to add an ogre.cfg (Usually found in documents) to the binary dir.
 
-Ensure you copied the ogre plugins.cfg in your working directory.
-
-Ensure your resources.cfg is setup properly. If not use d3d9 render
+Ensure your resources.cfg/plugins.cfg is setup properly. If not use d3d9 render
