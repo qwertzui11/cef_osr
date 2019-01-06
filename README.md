@@ -14,9 +14,11 @@ Download prebuilt cef binaries and extract them somewhere
 
 Make sure you set set(CEF_ROOT XXXX) within the cmakelists
 
+You might need to copy your ogre.cfg (Usually found in documents) to the binary dir.
+
+Ensure your resources.cfg/plugins.cfg is setup properly. If not use d3d9 render
+
 This is what you will get
 ![cef sample]( https://i.imgur.com/pvziPKd.gif "Cef")
 
-You might need to add an ogre.cfg (Usually found in documents) to the binary dir.
 
-Ensure your resources.cfg/plugins.cfg is setup properly. If not use d3d9 render
