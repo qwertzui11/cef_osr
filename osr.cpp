@@ -1,15 +1,26 @@
-#include <cef_app.h>
-#include <cef_client.h>
-#include <cef_render_handler.h>
+#include <include/cef_app.h>
+#include <include/cef_client.h>
+#include <include/cef_render_handler.h>
 
-#include <OGRE/OgreEntity.h>
-#include <OGRE/OgreHardwarePixelBuffer.h>
-#include <OGRE/OgreMeshManager.h>
-#include <OGRE/OgreRenderWindow.h>
-#include <OGRE/OgreRoot.h>
+#include <OgreEntity.h>
+#include <OgreHardwarePixelBuffer.h>
+#include <OgreMeshManager.h>
+#include <OgreRenderWindow.h>
+#include <OgreRoot.h>
 
+#include <OgreCommon.h>
 
-
+#include <OgreRenderQueueListener.h>
+#include <OgreSingleton.h>
+#include <OgreTexture.h>
+#include <OgreSceneNode.h>
+#include <OgreTechnique.h>
+#include <OgreTextureManager.h>
+#include <OgreMaterialManager.h>
+#include <OgreInput.h>
+#include <OgreFrameListener.h>
+#include <OgreCamera.h>
+#include <OgreViewPort.h>
 class RenderHandler : public Ogre::FrameListener, public CefRenderHandler
 {
 public:
@@ -30,7 +41,7 @@ public:
             return false;
         }
 
-        m_renderNode->yaw(Ogre::Radian(evt.timeSinceLastFrame)*Ogre::Math::PI*2.*(1./10.)); // one turn in 10sec
+       // m_renderNode->yaw(Ogre::Radian(evt.timeSinceLastFrame)*Ogre::Math::PI*2.*(1./10.)); // one turn in 10sec
 
         CefDoMessageLoopWork();
 
@@ -39,10 +50,10 @@ public:
 
     // CefRenderHandler interface
 public:
-    bool GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect)
+    void GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect)
     {
         rect = CefRect(0, 0, m_renderTexture->getWidth(), m_renderTexture->getHeight());
-        return true;
+        //return true;
     }
     void OnPaint(CefRefPtr<CefBrowser> browser, PaintElementType type, const RectList &dirtyRects, const void *buffer, int width, int height)
     {
@@ -77,9 +88,14 @@ public:
 };
 
 
-int main(int argc, char *argv[])
-{
-    CefMainArgs args(argc, argv);
+int APIENTRY wWinMain(HINSTANCE hInstance,
+                      HINSTANCE hPrevInstance,
+                      LPTSTR lpCmdLine,
+                      int nCmdShow) {
+  UNREFERENCED_PARAMETER(hPrevInstance);
+  UNREFERENCED_PARAMETER(lpCmdLine);
+    CefMainArgs args(hInstance);
+
 
     {
         int result = CefExecuteProcess(args, nullptr, nullptr);
@@ -97,6 +113,9 @@ int main(int argc, char *argv[])
 
     {
         CefSettings settings;
+        #if !defined(CEF_USE_SANDBOX)
+        settings.no_sandbox = true;
+        #endif
 
         // checkout detailed settings options http://magpcss.org/ceforum/apidocs/projects/%28default%29/_cef_settings_t.html
         // nearly all the settings can be set via args too.
@@ -118,7 +137,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    Ogre::Root* renderSystem(nullptr);
+    Ogre::Root* root(nullptr);
     Ogre::SceneManager* renderScene(nullptr);
     Ogre::TexturePtr renderTexture;
     Ogre::SceneNode *renderNode;
@@ -126,22 +145,22 @@ int main(int argc, char *argv[])
     // renderer
     {
         // initalise Ogre3d
-        renderSystem = new Ogre::Root();
-        if (!renderSystem->restoreConfig())
+        root = new Ogre::Root("plugins.cfg", "ogre.cfg","Ogre.log" );
+        if (!root->restoreConfig())
         {
-            renderSystem->showConfigDialog();
+            root->showConfigDialog(NULL);
         }
-        renderSystem->initialise(true);
+        root->initialise(true);
 
-        renderScene = renderSystem->createSceneManager(Ogre::ST_GENERIC);
+        renderScene = root->createSceneManager(Ogre::ST_GENERIC);
         renderScene->setAmbientLight(Ogre::ColourValue(1.));
 
         Ogre::Camera* camera(renderScene->createCamera("camera"));
         camera->setAutoAspectRatio(true);
         camera->setNearClipDistance(0.1);
         camera->setFarClipDistance(100.);
-        renderSystem->getAutoCreatedWindow()->addViewport(camera);
-        camera->getViewport()->setBackgroundColour(Ogre::ColourValue::White);
+        root->getAutoCreatedWindow()->addViewport(camera);
+        camera->getViewport()->setBackgroundColour(Ogre::ColourValue::Black);
 
         // create mesh, texture, material, node and entity
         renderTexture = Ogre::TextureManager::getSingleton().createManual(
@@ -169,7 +188,7 @@ int main(int argc, char *argv[])
     {
         renderHandler = new RenderHandler(renderTexture, renderNode);
 
-        renderSystem->addFrameListener(renderHandler);
+        root->addFrameListener(renderHandler);
     }
 
     // create browser-window
@@ -182,13 +201,13 @@ int main(int argc, char *argv[])
         // browserSettings.windowless_frame_rate = 60; // 30 is default
 
         // in linux set a gtk widget, in windows a hwnd. If not available set nullptr - may cause some render errors, in context-menu and plugins.
-        std::size_t windowHandle = 0;
-        renderSystem->getAutoCreatedWindow()->getCustomAttribute("WINDOW", &windowHandle);
-        window_info.SetAsWindowless(windowHandle, false); // false means no transparency (site background colour)
+       CefWindowHandle windowHandle;
+        root->getAutoCreatedWindow()->getCustomAttribute("WINDOW", &windowHandle);
+        window_info.SetAsWindowless(windowHandle); // false means no transparency (site background colour)
 
         browserClient = new BrowserClient(renderHandler);
 
-        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "http://deanm.github.io/pre3d/monster.html", browserSettings, nullptr);
+        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "https://webglsamples.org/aquarium/aquarium.html", browserSettings, nullptr);
 
         // inject user-input by calling - non-trivial for non-windows - checkout the cefclient source and the platform specific cpp, like cefclient_osr_widget_gtk.cpp for linux
         // browser->GetHost()->SendKeyEvent(...);
@@ -199,7 +218,7 @@ int main(int argc, char *argv[])
 
     // start rendering and calling method RenderHandler::frameStarted
     {
-        renderSystem->startRendering();
+        root->startRendering();
     }
 
     {
@@ -209,7 +228,7 @@ int main(int argc, char *argv[])
 
         renderScene->destroyAllMovableObjects();
         delete renderScene;
-        delete renderSystem;
+        delete root;
         delete renderHandler;
     }
 
