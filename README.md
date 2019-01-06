@@ -15,4 +15,7 @@ This is what you will get
 ![cef sample]( https://i.imgur.com/pvziPKd.gif "Cef")
 
 Ensure you got the content of the folder cef/Resources/* and the executable chrome-sandbox along with the osr binary.
+
 Ensure you copied the ogre plugins.cfg in your working directory.
+
+Ensure your resources.cfg is setup properly. If not use d3d9 render

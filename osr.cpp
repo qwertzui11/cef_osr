@@ -207,7 +207,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
         browserClient = new BrowserClient(renderHandler);
 
-        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "http://127.0.0.1:5500/awesome_progress.html", browserSettings, nullptr);
+        browser = CefBrowserHost::CreateBrowserSync(window_info, browserClient.get(), "https://webglsamples.org/aquarium/aquarium.html", browserSettings, nullptr);
 
         // inject user-input by calling - non-trivial for non-windows - checkout the cefclient source and the platform specific cpp, like cefclient_osr_widget_gtk.cpp for linux
         // browser->GetHost()->SendKeyEvent(...);
