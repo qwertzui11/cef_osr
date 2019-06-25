@@ -1,4 +1,5 @@
 *.swp
 *~
 *.txt.user
+.vscode/
 
